@@ -18,7 +18,7 @@
           <!-- /.co-movie-wrapper -->
           <div
             v-show="movie.poster_path !== null"
-            class="col movie"
+            class="col"
             v-for="movie in movies"
             :key="movie.id"
           >
@@ -44,7 +44,7 @@
               </li>
 
               <li>Voto:{{ Math.round(Number(movie.vote_average) / 2) }}</li>
-              <Rate :length="5" :value="Math.round(Number(movie.vote_average) / 2)"></Rate>
+              <Rate :length="5" :value="Math.round(Number(movie.vote_average) / 2)" :readonly="true"></Rate>
             </ul>
           </div>
           <!-- /.col movie -->
@@ -77,12 +77,13 @@ export default {
   },
   methods: {
     callApi() {
-      let apiOne = `${this.API_MOVIE}${this.search.toLowerCase()}`;
+      if(this.search !== '') {
+        let apiOne = `${this.API_MOVIE}${this.search.toLowerCase()}`;
       let apiTwo = `${this.API_SERIE}${this.search.toLowerCase()}`;
       const requestOne = axios.get(apiOne);
       const requestTwo = axios.get(apiTwo);
-
-      axios
+      
+        axios
         .all([requestOne, requestTwo])
         .then((responses) => {
           console.log(responses);
@@ -98,30 +99,8 @@ export default {
         });
 
         this.search = '';
-
-      // axios
-      //   .get(`${this.API_MOVIE}${this.search.toLowerCase()}`)
-      //   .then((response) => {
-      //     // console.log(response);
-      //     this.movies = response.data.results;
-      //     console.log(this.movies);
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //     this.error = `OPS! ${error.message}`;
-      //   });
-
-      //   axios
-      //   .get(`${this.API_SERIE}${this.search.toLowerCase()}`)
-      //   .then((response) => {
-      //     // console.log(response);
-      //     this.movies = [...this.movies, ...response.data.results]
-      //     console.log(this.movies);
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //     this.error = `OPS! ${error.message}`;
-      //   });
+      }
+      
     },
   },
   mounted() {},
