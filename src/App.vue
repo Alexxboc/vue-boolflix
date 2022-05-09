@@ -5,8 +5,8 @@
         <div class="logo">BOOLFLIX</div>
         <!-- /.logo -->
         <div class="search">
-          <input type="text" />
-          <button>Search</button>
+          <input type="text" v-model="search" @keyup.enter="callApi"/>
+          <button @click="callApi">Search</button>
         </div>
         <!-- /.search -->
       </nav>
@@ -34,31 +34,36 @@ export default {
   components: {},
   data() {
     return {
-      API_URL:
-        "https://api.themoviedb.org/3/search/movie?api_key=c08439fe63fd73db5098990b644bc2a5&language=it-IT&page=1&include_adult=false&query=marvel",
+      API_URL: "https://api.themoviedb.org/3/search/movie?api_key=c08439fe63fd73db5098990b644bc2a5&language=it-IT&page=1&include_adult=false&query=",
       response: null,
-      movies: null,
+      movies: [],
+      search: ''
     };
   },
   methods: {
     callApi() {
       axios
-        .get(this.API_URL)
+        .get(`${this.API_URL}${this.search.toLowerCase()}`)
         .then((response) => {
-          //   console.log(response);
+            // console.log(response);
           this.movies = response.data.results;
-          console.log(this.movies);
-          this.loading = false;
+          // console.log(this.movies);
         })
         .catch((error) => {
           console.log(error);
-          this.error = `  OPS! ${error.message}`;
+          this.error = `OPS! ${error.message}`;
         });
     },
+    
   },
   mounted() {
-    this.callApi();
+    
   },
+  computed: {
+    // searchMovie() {
+    //   return console.log(this.search);
+    // }
+  }
 };
 </script>
 
