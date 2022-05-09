@@ -5,7 +5,7 @@
         <div class="logo">BOOLFLIX</div>
         <!-- /.logo -->
         <div class="search">
-          <input type="text" v-model="search" @keyup.enter="callApi"/>
+          <input type="text" v-model="search" @keyup.enter="callApi" />
           <button @click="callApi">Search</button>
         </div>
         <!-- /.search -->
@@ -15,10 +15,14 @@
     <main>
       <div class="movie" v-for="movie in movies" :key="movie.id">
         <ul>
-          <li>Titolo: {{movie.title}}</li>
-          <li>Titolo originale: {{movie.original_title}}</li>
-          <li>Lingua: {{movie.original_language}}</li>
-          <li>Voto: {{movie.vote_average}}</li>
+          <li>Titolo: {{ movie.title }}</li>
+          <li>Titolo originale: {{ movie.original_title }}</li>
+          <li v-if="movie.original_language === '' ">Lingua: {{ movie.original_language }}</li>
+          <li v-else-if="movie.original_language === 'en'"><country-flag  :country="'gb'" size='small'/></li>
+          <li v-else><country-flag :country='movie.original_language' size='small'/></li>
+          
+
+          <li>Voto: {{ movie.vote_average }}</li>
         </ul>
       </div>
       <!-- /.movie -->
@@ -28,16 +32,16 @@
 
 <script>
 import axios from "axios";
-
 export default {
   name: "App",
   components: {},
   data() {
     return {
-      API_URL: "https://api.themoviedb.org/3/search/movie?api_key=c08439fe63fd73db5098990b644bc2a5&language=it-IT&page=1&include_adult=false&query=",
+      API_URL:
+        "https://api.themoviedb.org/3/search/movie?api_key=c08439fe63fd73db5098990b644bc2a5&language=it-IT&page=1&include_adult=false&query=",
       response: null,
       movies: [],
-      search: ''
+      search: "",
     };
   },
   methods: {
@@ -45,7 +49,7 @@ export default {
       axios
         .get(`${this.API_URL}${this.search.toLowerCase()}`)
         .then((response) => {
-            // console.log(response);
+          // console.log(response);
           this.movies = response.data.results;
           // console.log(this.movies);
         })
@@ -54,16 +58,11 @@ export default {
           this.error = `OPS! ${error.message}`;
         });
     },
-    
   },
-  mounted() {
-    
-  },
+  mounted() {},
   computed: {
-    // searchMovie() {
-    //   return console.log(this.search);
-    // }
-  }
+    
+  },
 };
 </script>
 
