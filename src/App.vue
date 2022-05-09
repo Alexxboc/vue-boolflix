@@ -14,6 +14,7 @@
     </header>
     <main>
       <div class="movie" v-for="movie in movies" :key="movie.id">
+        <img :src="'https://image.tmdb.org/t/p/w342'+movie.poster_path" alt="">
         <ul>
           <li>Titolo: {{ movie.title }}</li>
           <li>Titolo originale: {{ movie.original_title }}</li>
@@ -60,15 +61,16 @@ export default {
 
       axios
         .all([requestOne, requestTwo])
-        .then(
-          axios.spread((...responses) => {
+        .then(responses => {
             console.log(responses);
-            const responseOne = responses[0];
-            const responseTwo = responses[1];
+            const responseOne = responses[0].data.results;
+            const responseTwo = responses[1].data.results;
             console.log(responseOne, responseTwo);
-            
+            // console.log(responses.data.results);
+            this.movies = [...responseOne, ...responseTwo]
+
           })
-        )
+        
         .catch((errors) => {
           console.error(errors);
         });
@@ -78,7 +80,19 @@ export default {
       //   .then((response) => {
       //     // console.log(response);
       //     this.movies = response.data.results;
-      //     // console.log(this.movies);
+      //     console.log(this.movies);
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //     this.error = `OPS! ${error.message}`;
+      //   });
+
+      //   axios
+      //   .get(`${this.API_SERIE}${this.search.toLowerCase()}`)
+      //   .then((response) => {
+      //     // console.log(response);
+      //     this.movies = [...this.movies, ...response.data.results]
+      //     console.log(this.movies);
       //   })
       //   .catch((error) => {
       //     console.log(error);
