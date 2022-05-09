@@ -16,7 +16,12 @@
       <div class="container-fluid">
         <div class="row row-cols-5">
           <!-- /.co-movie-wrapper -->
-          <div v-show="movie.poster_path" class="col movie" v-for="movie in movies" :key="movie.id">
+          <div
+            v-show="movie.poster_path !== null"
+            class="col movie"
+            v-for="movie in movies"
+            :key="movie.id"
+          >
             <img
               :src="'https://image.tmdb.org/t/p/w300' + movie.poster_path"
               alt=""
@@ -24,7 +29,9 @@
             <ul>
               <li v-if="movie.title">Titolo: {{ movie.title }}</li>
               <li v-else>Titolo: {{ movie.name }}</li>
-              <li v-if="movie.original_title">Titolo originale: {{ movie.original_title }}</li>
+              <li v-if="movie.original_title">
+                Titolo originale: {{ movie.original_title }}
+              </li>
               <li v-else>Titolo originale: {{ movie.original_name }}</li>
               <li v-if="movie.original_language === ''">
                 Lingua: {{ movie.original_language }}
@@ -37,6 +44,7 @@
               </li>
 
               <li>Voto:{{ Math.round(Number(movie.vote_average) / 2) }}</li>
+              <Rate :length="5" :value="Math.round(Number(movie.vote_average) / 2)"></Rate>
             </ul>
           </div>
           <!-- /.col movie -->
@@ -50,9 +58,12 @@
 
 <script>
 import axios from "axios";
+import Rate from "../node_modules/vue-rate/src/Rate.vue"
 export default {
   name: "App",
-  components: {},
+  components: {
+    Rate,
+  },
   data() {
     return {
       API_MOVIE:
@@ -86,6 +97,7 @@ export default {
           console.error(errors);
         });
 
+        this.search = '';
 
       // axios
       //   .get(`${this.API_MOVIE}${this.search.toLowerCase()}`)
@@ -111,17 +123,13 @@ export default {
       //     this.error = `OPS! ${error.message}`;
       //   });
     },
-    
   },
-  mounted() {
-   
-  },
-  computed: {
-    
-  },
+  mounted() {},
+  computed: {},
 };
 </script>
 
 <style lang="scss">
 @import "@/assets/scss/style.scss";
+
 </style>
