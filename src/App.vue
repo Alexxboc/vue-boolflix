@@ -13,25 +13,37 @@
       <!-- /.navbar -->
     </header>
     <main>
-      <div class="movie" v-for="movie in movies" :key="movie.id">
-        <img :src="'https://image.tmdb.org/t/p/w342'+movie.poster_path" alt="">
-        <ul>
-          <li>Titolo: {{ movie.title }}</li>
-          <li>Titolo originale: {{ movie.original_title }}</li>
-          <li v-if="movie.original_language === ''">
-            Lingua: {{ movie.original_language }}
-          </li>
-          <li v-else-if="movie.original_language === 'en'">
-            <country-flag :country="'gb'" size="small" />
-          </li>
-          <li v-else>
-            <country-flag :country="movie.original_language" size="small" />
-          </li>
+      <div class="container-fluid">
+        <div class="row row-cols-5">
+          <!-- /.co-movie-wrapper -->
+          <div v-show="movie.poster_path" class="col movie" v-for="movie in movies" :key="movie.id">
+            <img
+              :src="'https://image.tmdb.org/t/p/w300' + movie.poster_path"
+              alt=""
+            />
+            <ul>
+              <li v-if="movie.title">Titolo: {{ movie.title }}</li>
+              <li v-else>Titolo: {{ movie.name }}</li>
+              <li v-if="movie.original_title">Titolo originale: {{ movie.original_title }}</li>
+              <li v-else>Titolo originale: {{ movie.original_name }}</li>
+              <li v-if="movie.original_language === ''">
+                Lingua: {{ movie.original_language }}
+              </li>
+              <li v-else-if="movie.original_language === 'en'">
+                <country-flag :country="'gb'" size="small" />
+              </li>
+              <li v-else>
+                <country-flag :country="movie.original_language" size="small" />
+              </li>
 
-          <li>Voto: {{ movie.vote_average }}</li>
-        </ul>
+              <li>Voto:{{ Math.round(Number(movie.vote_average) / 2) }}</li>
+            </ul>
+          </div>
+          <!-- /.col movie -->
+        </div>
+        <!-- /.row -->
       </div>
-      <!-- /.movie -->
+      <!-- /.container-fluid -->
     </main>
   </div>
 </template>
@@ -61,19 +73,19 @@ export default {
 
       axios
         .all([requestOne, requestTwo])
-        .then(responses => {
-            console.log(responses);
-            const responseOne = responses[0].data.results;
-            const responseTwo = responses[1].data.results;
-            console.log(responseOne, responseTwo);
-            // console.log(responses.data.results);
-            this.movies = [...responseOne, ...responseTwo]
+        .then((responses) => {
+          console.log(responses);
+          const responseOne = responses[0].data.results;
+          const responseTwo = responses[1].data.results;
+          console.log(responseOne, responseTwo);
+          // console.log(responses.data.results);
+          this.movies = [...responseOne, ...responseTwo];
+        })
 
-          })
-        
         .catch((errors) => {
           console.error(errors);
         });
+
 
       // axios
       //   .get(`${this.API_MOVIE}${this.search.toLowerCase()}`)
@@ -99,9 +111,14 @@ export default {
       //     this.error = `OPS! ${error.message}`;
       //   });
     },
+    
   },
-  mounted() {},
-  computed: {},
+  mounted() {
+   
+  },
+  computed: {
+    
+  },
 };
 </script>
 
