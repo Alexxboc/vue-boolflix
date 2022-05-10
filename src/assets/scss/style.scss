@@ -22,6 +22,10 @@ img {
 
 /* Utilities */
 
+.active {
+    color: $netflix-white !important;
+}
+
 .d_block {
     display: block !important;
 }

@@ -1,86 +1,95 @@
 <template>
   <div id="app">
-    <header>
-      <nav class="navbar p-3 bg_black">
-        <div class="navbar_left d-flex align-items-center">
-          <div class="logo">
-            <img width="150px" src="@/assets/logo-alexx.png" alt="logo" />
+    <header class="bg_black p-3">
+      <div class="container-fluid">
+        <nav class="navbar">
+          <div class="navbar_left d-flex align-items-center">
+            <div class="logo" @click="homeCallApi">
+              <img width="150px" src="@/assets/logo-alexx.png" alt="logo" />
+            </div>
+            <!-- /.logo -->
+            <div class="nav_menu">
+              <ul class="unstyled d-flex m-0">
+                <li>
+                  <a href="#" class="decor_none text_light active">Home</a>
+                </li>
+                <li class="ms-2">
+                  <a href="#" class="decor_none text_light">Serie TV</a>
+                </li>
+                <li class="ms-2">
+                  <a href="#" class="decor_none text_light">Film</a>
+                </li>
+                <li class="ms-2">
+                  <a href="#" class="decor_none text_light">Nuovi e popolari</a>
+                </li>
+                <li class="ms-2">
+                  <a href="#" class="decor_none text_light">La mia lista</a>
+                </li>
+                <li class="ms-2">
+                  <a href="#" class="decor_none text_light"
+                    >Audio e sottotitoli</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <!-- /.nav_menu -->
           </div>
-          <!-- /.logo -->
-          <div class="nav_menu">
-            <ul class="unstyled d-flex m-0">
-              <li>
-                <a href="#" class="decor_none text_light">Home</a>
-              </li>
-              <li class="ms-2">
-                <a href="#" class="decor_none text_light">Serie TV</a>
-              </li>
-              <li class="ms-2">
-                <a href="#" class="decor_none text_light">Film</a>
-              </li>
-              <li class="ms-2">
-                <a href="#" class="decor_none text_light">Nuovi e popolari</a>
-              </li>
-              <li class="ms-2">
-                <a href="#" class="decor_none text_light">La mia lista</a>
-              </li>
-              <li class="ms-2">
-                <a href="#" class="decor_none text_light"
-                  >Audio e sottotitoli</a
-                >
-              </li>
-            </ul>
-          </div>
-          <!-- /.nav_menu -->
-        </div>
-        <!-- /.navbar_left -->
-        <div class="navbar_right">
-          <div class="search d-flex align-items-center">
-            <div class="search_glass d-none justify-content-center align-items-center text-white" :class="click === true ? 'd_flex' : ''">
-              <a @click="callApi" class="btn_search decor_none text_white fs-6"
+          <!-- /.navbar_left -->
+          <div class="navbar_right">
+            <div class="search d-flex align-items-center">
+              <div
+                class="
+                  search_glass
+                  d-none
+                  justify-content-center
+                  align-items-center
+                  text-white
+                "
+                :class="click === true ? 'd_flex' : ''"
+              >
+                <a
+                  @click="callApi"
+                  class="btn_search decor_none text_white fs-6"
+                  ><font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+                </a>
+              </div>
+
+              <input
+                class="input_search text-left d-none"
+                :class="click === true ? 'd_block' : ''"
+                type="text"
+                v-model="search"
+                @keyup.enter="callApi"
+                placeholder="Titoli, persone, generi"
+              />
+
+              <a
+                @click="isClicked"
+                class="btn_search decor_none text_white fs-5 ms-3"
                 ><font-awesome-icon icon="fa-solid fa-magnifying-glass" />
               </a>
+
+              <a href="#" class="text_white fs-5 ms-3"
+                ><font-awesome-icon icon="fa-solid fa-bell"
+              /></a>
+              <div class="avatar ms-3">
+                <img src="@/assets/avatar.jpeg" alt="avatar" />
+              </div>
+              <!-- /.avatar -->
             </div>
-
-            <input
-              class="input_search text-left d-none"
-              :class="click === true ? 'd_block' : ''"
-              type="text"
-              v-model="search"
-              @keyup.enter="callApi"
-              placeholder="Titoli, persone, generi"
-            />
-
-            <a
-              @click="isClicked"
-              class="btn_search decor_none text_white fs-5 ms-3"
-              ><font-awesome-icon icon="fa-solid fa-magnifying-glass" />
-            </a>
-
-            <a href="#" class="text_white fs-5 ms-3"
-              ><font-awesome-icon icon="fa-solid fa-bell"
-            /></a>
-            <div class="avatar ms-3">
-              <img src="@/assets/avatar.jpeg" alt="avatar" />
-            </div>
-            <!-- /.avatar -->
+            <!-- /.search -->
           </div>
-          <!-- /.search -->
-        </div>
-        <!-- /.navbar_right -->
-      </nav>
-      <!-- /.navbar -->
+          <!-- /.navbar_right -->
+        </nav>
+        <!-- /.navbar -->
+      </div>
+      <!-- /.container -->
     </header>
-    <main class="p-5">
+    <main class="p-3">
       <div class="container-fluid">
         <div class="row row-cols-5 gy-5 gx-3">
           <!-- /.co-movie-wrapper -->
-          <div
-            v-show="movie.poster_path !== null"
-            class="col"
-            v-for="movie in movies"
-            :key="movie.id"
-          >
+          <div class="col" v-for="movie in filterMovies" :key="movie.id">
             <div class="movie_card position-relative">
               <img
                 :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
@@ -117,7 +126,7 @@
                   <span class="p_1_imp fw-bold">Lingua Originale:</span>
                   <country-flag
                     :country="movie.original_language"
-                    size="medium"
+                    size="small"
                   />
                 </div>
                 <div class="vote_average d-flex align-items-center">
@@ -191,6 +200,11 @@ export default {
       }
     },
 
+    homeCallApi() {
+      this.search = "marvel";
+      this.callApi();
+    },
+
     isClicked() {
       // console.log('click');
       if (this.click === false) {
@@ -201,8 +215,20 @@ export default {
       console.log(this.click);
     },
   },
-  mounted() {},
-  computed: {},
+  mounted() {
+    this.search = "marvel";
+    this.callApi();
+  },
+
+  computed: {
+    filterMovies() {
+      return this.movies.filter(movie => {
+        if(movie.poster_path !== null){
+          return movie
+        }
+      })
+    }
+  },
 };
 </script>
 
@@ -211,10 +237,15 @@ export default {
 
 /* Header */
 
-.nav_menu {
-  a:hover {
-    color: $netflix-white;
+.navbar_left {
+  .logo {
     cursor: pointer;
+  }
+  .nav_menu {
+    a:hover {
+      color: $netflix-white;
+      cursor: pointer;
+    }
   }
 }
 
@@ -236,6 +267,9 @@ export default {
     border-top: 1px solid $netflix-white;
     padding: 0 1rem;
     background-color: rgb(81 81 81 / 19%);
+  }
+  .btn_search {
+    cursor: pointer;
   }
 }
 
