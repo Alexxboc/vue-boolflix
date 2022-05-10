@@ -26,6 +26,14 @@ img {
     color: $netflix-white !important;
 }
 
+.w_40 {
+    width: 40%;
+}
+
+.p_relative {
+    position: relative;
+}
+
 .d_block {
     display: block !important;
 }
@@ -54,6 +62,10 @@ img {
     z-index: 1;
 }
 
+.bg_dark_transparent {
+    background-color: $netflix-bg-dark-transparent
+}
+
 .bg_dark {
     background-color: $netflix-bg-dark;
 }
@@ -70,6 +82,10 @@ img {
     background-color: $netflix-white;
 }
 
+.bg_btn_transp {
+    background-color: $netflix-btn-transparent;
+}
+
 .text_white {
     color: $netflix-white !important;
 }
@@ -80,6 +96,14 @@ img {
 
 .text_black {
     color: $netflix-bg-black;
+}
+
+.text_shadow {
+    text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
+}
+
+.box_shadow {
+    box-shadow: 4px 3px rgba(0, 0, 0, 0.3);
 }
 
 .input_search {

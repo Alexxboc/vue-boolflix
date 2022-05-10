@@ -3,9 +3,9 @@ import App from './App.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faMagnifyingGlass, faArrowRight, faArrowDown, faBell } from '@fortawesome/free-solid-svg-icons'
+import { faMagnifyingGlass, faArrowRight, faArrowDown, faBell, faPlay, faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 Vue.component('font-awesome-icon', FontAwesomeIcon)
-library.add(faMagnifyingGlass, faArrowRight, faArrowDown, faBell)
+library.add(faMagnifyingGlass, faArrowRight, faArrowDown, faBell, faPlay, faCircleInfo)
 
 import CountryFlag from 'vue-country-flag'
 Vue.component('country-flag', CountryFlag)
