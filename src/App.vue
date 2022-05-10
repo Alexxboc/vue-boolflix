@@ -1,20 +1,63 @@
 <template>
   <div id="app">
     <header>
-      <nav class="navbar p-3 bg-light">
-        <div class="logo">BOOLFLIX</div>
-        <!-- /.logo -->
-        <div class="search">
-          <input type="text" v-model="search" @keyup.enter="callApi" />
-          <button @click="callApi">Search</button>
+      <nav class="navbar p-3 bg_black">
+        <div class="navbar_left d-flex align-items-center">
+          <div class="logo">
+            <img width="150px" src="@/assets/logo-alexx.png" alt="logo" />
+          </div>
+          <!-- /.logo -->
+          <div class="nav_menu">
+            <ul class="unstyled d-flex m-0">
+              <li>
+                <a href="#" class="decor_none text_light">Home</a>
+              </li>
+              <li class="ms-2">
+                <a href="#" class="decor_none text_light">Serie TV</a>
+              </li>
+              <li class="ms-2">
+                <a href="#" class="decor_none text_light">Film</a>
+              </li>
+              <li class="ms-2">
+                <a href="#" class="decor_none text_light">Nuovi e popolari</a>
+              </li>
+              <li class="ms-2">
+                <a href="#" class="decor_none text_light">La mia lista</a>
+              </li>
+              <li class="ms-2">
+                <a href="#" class="decor_none text_light"
+                  >Audio e sottotitoli</a
+                >
+              </li>
+            </ul>
+          </div>
+          <!-- /.nav_menu -->
         </div>
-        <!-- /.search -->
+        <!-- /.navbar_left -->
+        <div class="navbar_right">
+          <div class="search">
+            <input
+              class="input_search text-left"
+              type="text"
+              v-model="search"
+              @keyup.enter="callApi"
+              placeholder="Titoli, persone, generi"
+            />
+            <a
+              @click="callApi"
+              class="btn_search bg_white decor_none text_black ms-1"
+              >Search</a
+            >
+          </div>
+          <!-- /.search -->
+        </div>
+        <!-- /.navbar_right -->
       </nav>
       <!-- /.navbar -->
     </header>
-    <main>
+    <main class="p-5">
       <div class="container-fluid">
-        <div class="row row-cols-5">
+        <div class="row row-cols-5 gy-5 gx-3">
           <!-- /.co-movie-wrapper -->
           <div
             v-show="movie.poster_path !== null"
@@ -22,30 +65,54 @@
             v-for="movie in movies"
             :key="movie.id"
           >
-            <img
-              :src="'https://image.tmdb.org/t/p/w300' + movie.poster_path"
-              alt=""
-            />
-            <ul>
-              <li v-if="movie.title">Titolo: {{ movie.title }}</li>
-              <li v-else>Titolo: {{ movie.name }}</li>
-              <li v-if="movie.original_title">
-                Titolo originale: {{ movie.original_title }}
-              </li>
-              <li v-else>Titolo originale: {{ movie.original_name }}</li>
-              <li v-if="movie.original_language === ''">
-                Lingua: {{ movie.original_language }}
-              </li>
-              <li v-else-if="movie.original_language === 'en'">
-                <country-flag :country="'gb'" size="small" />
-              </li>
-              <li v-else>
-                <country-flag :country="movie.original_language" size="small" />
-              </li>
-
-              <li>Voto:{{ Math.round(Number(movie.vote_average) / 2) }}</li>
-              <Rate :length="5" :value="Math.round(Number(movie.vote_average) / 2)" :readonly="true"></Rate>
-            </ul>
+            <div class="movie_card position-relative">
+              <img
+                :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
+                alt="movie poster"
+                class="w-100"
+              />
+              <div class="overview p-3">
+                <div class="movie_title" v-if="movie.title">
+                  Titolo: {{ movie.title }}
+                </div>
+                <div class="movie_title" v-else> <span class="fw-bold">Titolo:</span> {{ movie.name }}</div>
+                <div class="original_title" v-if="movie.original_title">
+                  Titolo originale: {{ movie.original_title }}
+                </div>
+                <div class="original_title" v-else>
+                  Titolo originale: {{ movie.original_name }}
+                </div>
+                <div class="language" v-if="movie.original_language === ''">
+                  Lingua: {{ movie.original_language }}
+                </div>
+                <div
+                  class="language"
+                  v-else-if="movie.original_language === 'en'"
+                >
+                  <span class="p_1_imp">Lingua Originale:</span
+                  ><country-flag :country="'gb'" size="small" />
+                </div>
+                <div class="language" v-else>
+                  <span class="p_1_imp">Lingua Originale:</span>
+                  <country-flag
+                    :country="movie.original_language"
+                    size="medium"
+                  />
+                </div>
+                <div class="vote_average d-flex align-items-center">
+                  <span class="me-2">Voto:</span>
+                  <Rate
+                    :length="5"
+                    :value="Math.round(Number(movie.vote_average) / 2)"
+                    :readonly="true"
+                  ></Rate>
+                </div>
+                <!-- /.vote_average -->
+                <p class="fs_10">{{ movie.overview }}</p>
+              </div>
+              <!-- /.overview -->
+            </div>
+            <!-- /.movie_card -->
           </div>
           <!-- /.col movie -->
         </div>
@@ -58,7 +125,7 @@
 
 <script>
 import axios from "axios";
-import Rate from "../node_modules/vue-rate/src/Rate.vue"
+import Rate from "../node_modules/vue-rate/src/Rate.vue";
 export default {
   name: "App",
   components: {
@@ -77,30 +144,29 @@ export default {
   },
   methods: {
     callApi() {
-      if(this.search !== '') {
+      if (this.search !== "") {
         let apiOne = `${this.API_MOVIE}${this.search.toLowerCase()}`;
-      let apiTwo = `${this.API_SERIE}${this.search.toLowerCase()}`;
-      const requestOne = axios.get(apiOne);
-      const requestTwo = axios.get(apiTwo);
-      
+        let apiTwo = `${this.API_SERIE}${this.search.toLowerCase()}`;
+        const requestOne = axios.get(apiOne);
+        const requestTwo = axios.get(apiTwo);
+
         axios
-        .all([requestOne, requestTwo])
-        .then((responses) => {
-          console.log(responses);
-          const responseOne = responses[0].data.results;
-          const responseTwo = responses[1].data.results;
-          console.log(responseOne, responseTwo);
-          // console.log(responses.data.results);
-          this.movies = [...responseOne, ...responseTwo];
-        })
+          .all([requestOne, requestTwo])
+          .then((responses) => {
+            console.log(responses);
+            const responseOne = responses[0].data.results;
+            const responseTwo = responses[1].data.results;
+            console.log(responseOne, responseTwo);
+            // console.log(responses.data.results);
+            this.movies = [...responseOne, ...responseTwo];
+          })
 
-        .catch((errors) => {
-          console.error(errors);
-        });
+          .catch((errors) => {
+            console.error(errors);
+          });
 
-        this.search = '';
+        this.search = "";
       }
-      
     },
   },
   mounted() {},
@@ -111,4 +177,41 @@ export default {
 <style lang="scss">
 @import "@/assets/scss/style.scss";
 
+
+/* Movie card */
+
+.movie_card {
+  img {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 1rem;
+  }
+  .overview {
+    width: 100%;
+    height: 100%;
+    border-radius: 1rem;
+    background-color: #000000cc;
+    z-index: 1;
+    flex-direction: column;
+    color: white;
+    justify-content: center;
+    align-items: flex-start;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+    transition: all 2s;
+  }
+
+  &:hover .overview {
+    display: flex;
+  }
+  &:hover {
+    transform: scale(1.1);
+    transition: all 2s;
+    z-index: 1;
+  }
+
+}
 </style>
