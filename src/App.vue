@@ -35,19 +35,35 @@
         </div>
         <!-- /.navbar_left -->
         <div class="navbar_right">
-          <div class="search">
+          <div class="search d-flex align-items-center">
+            <div class="search_glass d-none justify-content-center align-items-center text-white" :class="click === true ? 'd_flex' : ''">
+              <a @click="callApi" class="btn_search decor_none text_white fs-6"
+                ><font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+              </a>
+            </div>
+
             <input
-              class="input_search text-left"
+              class="input_search text-left d-none"
+              :class="click === true ? 'd_block' : ''"
               type="text"
               v-model="search"
               @keyup.enter="callApi"
               placeholder="Titoli, persone, generi"
             />
+
             <a
-              @click="callApi"
-              class="btn_search bg_white decor_none text_black ms-1"
-              >Search</a
-            >
+              @click="isClicked"
+              class="btn_search decor_none text_white fs-5 ms-3"
+              ><font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+            </a>
+
+            <a href="#" class="text_white fs-5 ms-3"
+              ><font-awesome-icon icon="fa-solid fa-bell"
+            /></a>
+            <div class="avatar ms-3">
+              <img src="@/assets/avatar.jpeg" alt="avatar" />
+            </div>
+            <!-- /.avatar -->
           </div>
           <!-- /.search -->
         </div>
@@ -73,34 +89,39 @@
               />
               <div class="overview p-3">
                 <div class="movie_title" v-if="movie.title">
-                  Titolo: {{ movie.title }}
+                  <span class="fw-bold">Titolo:</span> {{ movie.title }}
                 </div>
-                <div class="movie_title" v-else> <span class="fw-bold">Titolo:</span> {{ movie.name }}</div>
+                <div class="movie_title" v-else>
+                  <span class="fw-bold">Titolo:</span> {{ movie.name }}
+                </div>
                 <div class="original_title" v-if="movie.original_title">
-                  Titolo originale: {{ movie.original_title }}
+                  <span class="fw-bold">Titolo originale:</span>
+                  {{ movie.original_title }}
                 </div>
                 <div class="original_title" v-else>
-                  Titolo originale: {{ movie.original_name }}
+                  <span class="fw-bold">Titolo originale:</span>
+                  {{ movie.original_name }}
                 </div>
                 <div class="language" v-if="movie.original_language === ''">
-                  Lingua: {{ movie.original_language }}
+                  <span class="fw-bold">Lingua:</span>
+                  {{ movie.original_language }}
                 </div>
                 <div
                   class="language"
                   v-else-if="movie.original_language === 'en'"
                 >
-                  <span class="p_1_imp">Lingua Originale:</span
+                  <span class="p_1_imp fw-bold">Lingua Originale:</span
                   ><country-flag :country="'gb'" size="small" />
                 </div>
                 <div class="language" v-else>
-                  <span class="p_1_imp">Lingua Originale:</span>
+                  <span class="p_1_imp fw-bold">Lingua Originale:</span>
                   <country-flag
                     :country="movie.original_language"
                     size="medium"
                   />
                 </div>
                 <div class="vote_average d-flex align-items-center">
-                  <span class="me-2">Voto:</span>
+                  <span class="me-2 fw-bold">Voto:</span>
                   <Rate
                     :length="5"
                     :value="Math.round(Number(movie.vote_average) / 2)"
@@ -140,6 +161,7 @@ export default {
       response: null,
       movies: [],
       search: "",
+      click: false,
     };
   },
   methods: {
@@ -168,6 +190,16 @@ export default {
         this.search = "";
       }
     },
+
+    isClicked() {
+      // console.log('click');
+      if (this.click === false) {
+        this.click = true;
+      } else {
+        this.click = false;
+      }
+      console.log(this.click);
+    },
   },
   mounted() {},
   computed: {},
@@ -177,10 +209,40 @@ export default {
 <style lang="scss">
 @import "@/assets/scss/style.scss";
 
+/* Header */
+
+.nav_menu {
+  a:hover {
+    color: $netflix-white;
+    cursor: pointer;
+  }
+}
+
+.navbar_right {
+  .avatar {
+    img {
+      height: 50px;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 1px solid white;
+    }
+  }
+  .search_glass {
+    cursor: pointer;
+    height: 42px;
+    border-bottom: 1px solid $netflix-white;
+    border-left: 1px solid $netflix-white;
+    border-top: 1px solid $netflix-white;
+    padding: 0 1rem;
+    background-color: rgb(81 81 81 / 19%);
+  }
+}
 
 /* Movie card */
 
 .movie_card {
+  cursor: pointer;
   img {
     aspect-ratio: 1 / 1;
     object-fit: cover;
@@ -208,10 +270,13 @@ export default {
     display: flex;
   }
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.2);
     transition: all 2s;
     z-index: 1;
   }
 
+  p {
+    overflow-y: scroll;
+  }
 }
 </style>

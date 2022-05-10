@@ -22,6 +22,14 @@ img {
 
 /* Utilities */
 
+.d_block {
+    display: block !important;
+}
+
+.d_flex {
+    display: flex !important;
+}
+
 .fs_10 {
     font-size: 10px;
 }
@@ -59,7 +67,7 @@ img {
 }
 
 .text_white {
-    color: $netflix-white;
+    color: $netflix-white !important;
 }
 
 .text_light {
@@ -71,12 +79,10 @@ img {
 }
 
 .input_search {
-    background-color: transparent;
+    width: 300px;
+    background-color: rgb(81 81 81 / 19%);
     color: $netflix-white;
     border: 1px solid $netflix-white;
-    padding: 0.25rem 3rem;
-}
-
-.btn_search {
-    padding: 0.25rem 1rem;
+    padding: 0.50rem;
+    outline: none;
 }
