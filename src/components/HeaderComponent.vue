@@ -9,31 +9,7 @@
             <img width="150px" src="@/assets/logo-alexx.png" alt="logo" />
           </div>
           <!-- /.logo -->
-          <div class="nav_menu">
-            <ul class="unstyled d-flex m-0">
-              <li>
-                <a href="#" class="decor_none text_light active">Home</a>
-              </li>
-              <li class="ms-2">
-                <a href="#" class="decor_none text_light">Serie TV</a>
-              </li>
-              <li class="ms-2">
-                <a href="#" class="decor_none text_light">Film</a>
-              </li>
-              <li class="ms-2">
-                <a href="#" class="decor_none text_light">Nuovi e popolari</a>
-              </li>
-              <li class="ms-2">
-                <a href="#" class="decor_none text_light">La mia lista</a>
-              </li>
-              <li class="ms-2">
-                <a href="#" class="decor_none text_light"
-                  >Audio e sottotitoli</a
-                >
-              </li>
-            </ul>
-          </div>
-          <!-- /.nav_menu -->
+         <HeaderNavMenu />
         </div>
         <!-- /.navbar_left -->
         <div class="navbar_right">
@@ -76,8 +52,13 @@
 </template>
 
 <script>
+import HeaderNavMenu from "@/components/NavMenuComponent.vue"
+
 export default {
   name: "SiteHeader",
+  components: {
+      HeaderNavMenu,
+  }
 };
 </script>
 
@@ -89,12 +70,7 @@ export default {
   .logo {
     cursor: pointer;
   }
-  .nav_menu {
-    a:hover {
-      color: $netflix-white;
-      cursor: pointer;
-    }
-  }
+  
 }
 .navbar_right {
   .avatar {
