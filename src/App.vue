@@ -1,83 +1,11 @@
 <template>
   <div id="app">
-    <header
-      class="bg_dark_transparent py-1 px-5 fixed-top"
-      :class="{ change_color: scrollPosition > 50 }"
-      @mouseleave="isClickedFalse"
-    >
-      <div class="container-fluid">
-        <nav class="navbar">
-          <div class="navbar_left d-flex align-items-center">
-            <div class="logo" @click="homeCallApi">
-              <img width="150px" src="@/assets/logo-alexx.png" alt="logo" />
-            </div>
-            <!-- /.logo -->
-            <div class="nav_menu">
-              <ul class="unstyled d-flex m-0">
-                <li>
-                  <a href="#" class="decor_none text_light active">Home</a>
-                </li>
-                <li class="ms-2">
-                  <a href="#" class="decor_none text_light">Serie TV</a>
-                </li>
-                <li class="ms-2">
-                  <a href="#" class="decor_none text_light">Film</a>
-                </li>
-                <li class="ms-2">
-                  <a href="#" class="decor_none text_light">Nuovi e popolari</a>
-                </li>
-                <li class="ms-2">
-                  <a href="#" class="decor_none text_light">La mia lista</a>
-                </li>
-                <li class="ms-2">
-                  <a href="#" class="decor_none text_light"
-                    >Audio e sottotitoli</a
-                  >
-                </li>
-              </ul>
-            </div>
-            <!-- /.nav_menu -->
-          </div>
-          <!-- /.navbar_left -->
-          <div class="navbar_right">
-            <div class="search d-flex align-items-center">
-              <div
-                class="text-white"
-                :class="click === true ? 'search_glass' : ''"
-              >
-                <a
-                  @mouseover="isClickedTrue"
-                  @click="callApi"
-                  class="btn_search decor_none text_white"
-                  ><font-awesome-icon icon="fa-solid fa-magnifying-glass" />
-                </a>
-              </div>
-
-              <input
-                class="input_search text-left d-none"
-                :class="click === true ? 'd_block' : ''"
-                type="text"
-                v-model="search"
-                @keyup.enter="callApi"
-                placeholder="Titoli, persone, generi"
-              />
-
-              <a href="#" class="text_white fs-5 ms-3"
-                ><font-awesome-icon icon="fa-solid fa-bell"
-              /></a>
-              <div class="avatar ms-3">
-                <img src="@/assets/avatar.jpeg" alt="avatar" />
-              </div>
-              <!-- /.avatar -->
-            </div>
-            <!-- /.search -->
-          </div>
-          <!-- /.navbar_right -->
-        </nav>
-        <!-- /.navbar -->
-      </div>
-      <!-- /.container -->
-    </header>
+    <SiteHeader
+      v-model="search"
+      @homePageQuery="homeCallApi"
+      @apiRequest="callApi"
+      @searchValue="callApi"
+    />
     <main class="p_relative">
       <section class="jumbotron d-flex flex-column justify-content-center p-5">
         <div class="jumbotron_info">
@@ -208,10 +136,12 @@
 <script>
 import axios from "axios";
 import Rate from "../node_modules/vue-rate/src/Rate.vue";
+import SiteHeader from "@/components/HeaderComponent.vue";
 export default {
   name: "App",
   components: {
     Rate,
+    SiteHeader,
   },
   data() {
     return {
@@ -223,7 +153,6 @@ export default {
       movies: [],
       search: "",
       click: false,
-      scrollPosition: null,
     };
   },
   methods: {
@@ -233,7 +162,6 @@ export default {
         let apiTwo = `${this.API_SERIE}${this.search.toLowerCase()}`;
         const requestOne = axios.get(apiOne);
         const requestTwo = axios.get(apiTwo);
-
         axios
           .all([requestOne, requestTwo])
           .then((responses) => {
@@ -244,46 +172,22 @@ export default {
             // console.log(responses.data.results);
             this.movies = [...responseOne, ...responseTwo];
           })
-
           .catch((errors) => {
             console.error(errors);
           });
-
         this.search = "";
       }
     },
-
     homeCallApi() {
       this.search = "marvel";
       this.callApi();
     },
-
-    isClickedTrue() {
-      // console.log('click');
-      if (this.click === false) {
-        this.click = true;
-      }
-      console.log(this.click);
-    },
-
-    isClickedFalse() {
-      // console.log('click');
-      if (this.click === true) {
-        this.click = false;
-      }
-      console.log(this.click);
-    },
-  },
-  updateScroll() {
-    this.scrollPosition = window.scrollY;
   },
 
   mounted() {
     this.search = "marvel";
     this.callApi();
-    window.addEventListener("scroll", this.updateScroll);
   },
-
   computed: {
     filterMovies() {
       return this.movies.filter((movie) => {
@@ -298,55 +202,7 @@ export default {
 
 <style lang="scss">
 @import "@/assets/scss/style.scss";
-
 /* Header */
-
-.change_color {
-  background-color: $netflix-bg-dark;
-}
-
-.navbar_left {
-  .logo {
-    cursor: pointer;
-  }
-  .nav_menu {
-    a:hover {
-      color: $netflix-white;
-      cursor: pointer;
-    }
-  }
-}
-
-.navbar_right {
-  .avatar {
-    img {
-      height: 50px;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 1px solid white;
-    }
-  }
-  input {
-    border-radius: 0 1rem 1rem 0;
-  }
-  .search_glass {
-    cursor: pointer;
-    height: 42px;
-    border-bottom: 1px solid $netflix-white;
-    border-left: 1px solid $netflix-white;
-    border-top: 1px solid $netflix-white;
-    border-radius: 1rem 0 0 1rem;
-    padding: 0 1rem;
-    background-color: rgb(81 81 81 / 19%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .btn_search {
-    cursor: pointer;
-  }
-}
 
 /* Jumbotron */
 .jumbotron {
@@ -367,22 +223,18 @@ export default {
     right: 0;
     background-color: #222628c2;
   }
-
   .player_left {
     button:hover {
       filter: brightness(0.8);
     }
   }
 }
-
 /* Movies */
-
 .movies {
   position: absolute;
   top: 94%;
   left: 0;
 }
-
 .movie_card {
   cursor: pointer;
   img {
@@ -407,7 +259,6 @@ export default {
     display: none;
     transition: all 2s;
   }
-
   &:hover .overview {
     display: flex;
   }
@@ -416,7 +267,6 @@ export default {
     transition: all 2s;
     z-index: 1;
   }
-
   p {
     overflow-y: scroll;
   }
