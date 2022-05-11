@@ -87,11 +87,7 @@ export default {
 props: {
     filterMovies: Array,
 },
-  methods: {
-    search() {
-      console.log("search");
-    },
-  },
+  methods: {},
 };
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <header
-    class="bg_dark_transparent py-1 px-5 fixed-top"
+    class="bg_dark py-1 px-5 fixed-top"
   >
     <div class="container-fluid">
       <nav class="navbar">

@@ -59,6 +59,7 @@ export default {
     homeCallApi() {
       this.search = "marvel";
       this.callApi();
+      this.search = "";
     },
   },
 
