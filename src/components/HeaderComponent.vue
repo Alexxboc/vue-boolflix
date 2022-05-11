@@ -1,5 +1,5 @@
 <template>
-  <header class="bg_dark py-1 px-5 fixed-top">
+  <header class="bg_dark_transparent py-1 px-5 fixed-top" :class="scrollPosition > 60 ? 'change_color' : '' ">
     <div class="container-fluid">
       <HeaderNavbar />
     </div>
@@ -16,6 +16,19 @@ export default {
   components: {
     HeaderNavbar
   },
+  data() {
+    return {
+      scrollPosition: null,
+    }
+  },
+  methods: {
+    updateScroll() {
+      this.scrollPosition = window.scrollY;
+    }
+  },
+  mounted() {
+    window.addEventListener('scroll', this.updateScroll);
+  }
  
 };
 </script>

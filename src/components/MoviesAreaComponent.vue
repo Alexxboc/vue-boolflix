@@ -63,6 +63,7 @@ export default {
 
 <style lang="scss" scoped>
 .movies {
+  width: 100%;
   position: absolute;
   top: 94%;
   left: 0;
