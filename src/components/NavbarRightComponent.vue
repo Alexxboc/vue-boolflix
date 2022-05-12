@@ -46,25 +46,28 @@ export default {
 
   methods: {
     callApi() {
-      let apiOne = `${this.API_MOVIE}${this.search.toLowerCase()}`;
-      let apiTwo = `${this.API_SERIE}${this.search.toLowerCase()}`;
-      const requestOne = axios.get(apiOne);
-      const requestTwo = axios.get(apiTwo);
-      axios
-        .all([requestOne, requestTwo])
-        .then((responses) => {
-          // console.log(responses);
-          const responseOne = responses[0].data.results;
-          const responseTwo = responses[1].data.results;
-          console.log(responseOne, responseTwo);
-          // console.log(responses.data.results);
-          state.movies = [...responseOne, ...responseTwo];
-          // console.log(state.movies);
-        })
-        .catch((errors) => {
-          console.error(errors);
-        });
-      this.search = "";
+      if (this.search !== "") {
+        let apiOne = `${this.API_MOVIE}${this.search.toLowerCase()}`;
+        let apiTwo = `${this.API_SERIE}${this.search.toLowerCase()}`;
+        const requestOne = axios.get(apiOne);
+        const requestTwo = axios.get(apiTwo);
+
+        axios
+          .all([requestOne, requestTwo])
+          .then((responses) => {
+            // console.log(responses);
+            const responseOne = responses[0].data.results;
+            const responseTwo = responses[1].data.results;
+            console.log(responseOne, responseTwo);
+            // console.log(responses.data.results);
+            state.movies = [...responseOne, ...responseTwo];
+            // console.log(state.movies);
+          })
+          .catch((errors) => {
+            console.error(errors);
+          });
+        this.search = "";
+      }
     },
     homeCallApi() {
       this.search = "marvel";

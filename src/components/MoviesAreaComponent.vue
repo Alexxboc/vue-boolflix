@@ -26,13 +26,7 @@ export default {
   },
   data() {
     return {
-      //   API_MOVIE:
-      //     "https://api.themoviedb.org/3/search/movie?api_key=c08439fe63fd73db5098990b644bc2a5&language=it-IT&page=1&include_adult=false&query=",
-      //   API_SERIE:
-      //     "https://api.themoviedb.org/3/search/tv?api_key=c08439fe63fd73db5098990b644bc2a5&language=it-IT&page=1&include_adult=false&query=",
-      //   response: null,
       movies: [],
-      //   search: "",
       click: false,
     };
   },
@@ -44,10 +38,6 @@ export default {
     
   },
 
-  //   mounted() {
-  //     this.search = "marvel";
-  //     this.callApi();
-  //   },
   computed: {
     filterMovies() {
       this.getQuerySearch();
